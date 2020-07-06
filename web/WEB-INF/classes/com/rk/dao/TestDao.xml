@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rk.dao.TestDao">
+
+    <resultMap id="testList" type="com.rk.po.Test">
+        <id column="tid" property="tid"></id>
+        <result column="uid" property="uid"></result>
+        <result column="ttime" property="ttime"></result>
+        <result column="tgrade" property="tgrade"></result>
+    </resultMap>
+
+    <select id="getTestsByUid" parameterType="java.lang.String"
+            resultMap="testList">
+        select * from test where uid = #{uid} order by tid desc;
+    </select>
+
+    <insert id="insertTest" parameterType="com.rk.po.Test">
+        insert test(uid, ttime, tgrade) values (#{uid}, #{ttime}, #{tgrade});
+    </insert>
+
+</mapper>

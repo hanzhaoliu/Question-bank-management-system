@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rk.dao.QuestionDao">
+
+    <resultMap id="questionList" type="com.rk.po.Question">
+        <id column="qid" property="qid"></id>
+        <result column="qtext" property="qtext"></result>
+        <result column="qa" property="qa"></result>
+        <result column="qb" property="qb"></result>
+        <result column="qc" property="qc"></result>
+        <result column="qd" property="qd"></result>
+        <result column="qtype" property="qtype"></result>
+        <result column="qanswer" property="qanswer"></result>
+        <result column="qstate" property="qstate"></result>
+        <result column="qexplain" property="qexplain"></result>
+    </resultMap>
+
+    <select id="getAllQuestion" resultMap="questionList">
+        select * from question where qstate='1' order by rand();
+    </select>
+
+    <select id="getQuestion" parameterType="java.lang.Integer"
+            resultType="com.rk.po.Question">
+        select * from question where qid>#{num} limit 1;
+    </select>
+
+    <select id="getEffectiveQuestion" parameterType="java.lang.Integer"
+            resultType="com.rk.po.Question">
+        select * from question where qstate='1' and qid>#{num} limit 1;
+    </select>
+
+    <select id="getEffectiveUpQuestion" parameterType="java.lang.Integer"
+            resultType="com.rk.po.Question">
+        select * from question where qstate='1' and qid &lt; #{num} order by qid desc  limit 1;
+    </select>
+
+    <select id="getQuestionToNum" parameterType="java.lang.Integer"
+            resultMap="questionList">
+        select * from question where qstate='1' order by rand() limit #{num};
+    </select>
+
+    <select id="getQuestionToTypeAndNum" resultMap="questionList">
+        select * from question where qstate='1' and qtype=#{qtype} order by rand() limit #{num};
+    </select>
+
+    <insert id="insertQuestionFromUser" parameterType="com.rk.po.Question">
+        insert question(qtext, qa, qb, qc, qd, qstate)
+		  values(#{qtext}, #{qa}, #{qb}, #{qc}, #{qd}, '0');
+    </insert>
+
+    <insert id="insertQuestionFromAdmin" parameterType="com.rk.po.Question">
+        insert question(qtext, qa, qb, qc, qd, qanswer, qstate, qexplain)
+		  values(#{qtext}, #{qa}, #{qb}, #{qc}, #{qd}, #{qanswer}, '1', #{qexplain});
+    </insert>
+
+    <update id="updateQuestionState">
+        update question set qstate=#{qstate} where qid=#{qid};
+    </update>
+
+    <update id="updateQuestion" parameterType="com.rk.po.Question">
+        update question
+        set qtext=#{qtext}, qa=#{qa}, qb=#{qb},
+            qc=#{qc}, qd=#{qd}, qtype=#{qtype},
+            qanswer=#{qanswer}, qstate=#{qstate}, qexplain=#{qexplain}
+        where qid=#{qid};
+    </update>
+
+    <select id="getQuestionOfExamine" resultType="com.rk.po.Question">
+        select * from question where qstate='0' limit 1;
+    </select>
+
+    <select id="getAllQuestionOfExamine" resultMap="questionList">
+        select * from question where qstate='0' order by qid desc;
+    </select>
+
+    <select id="getAllErrorSet" parameterType="java.lang.String"
+            resultMap="questionList">
+        select * from question where qid in (select qid from error where uid = #{uid});
+    </select>
+
+    <delete id="deleteQuestion" parameterType="java.math.BigInteger">
+        delete from question where qid=#{qid};
+    </delete>
+</mapper>

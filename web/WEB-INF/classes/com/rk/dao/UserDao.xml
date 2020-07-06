@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rk.dao.UserDao">
+
+    <resultMap id="questionList" type="com.rk.po.Question">
+        <id column="qid" property="qid"></id>
+        <result column="qtext" property="qtext"></result>
+        <result column="qa" property="qa"></result>
+        <result column="qb" property="qb"></result>
+        <result column="qc" property="qc"></result>
+        <result column="qd" property="qd"></result>
+        <result column="qtype" property="qtype"></result>
+        <result column="qanswer" property="qanswer"></result>
+        <result column="qstate" property="qstate"></result>
+        <result column="qexplain" property="qexplain"></result>
+    </resultMap>
+
+    <select id="loginValidate" parameterType="com.rk.po.User"
+            resultType="String">
+        select uid from user where uid=#{uid} and upwd=#{upwd};
+    </select>
+
+    <select id="getUser" parameterType="java.lang.String"
+            resultType="com.rk.po.User">
+        select * from user where uid=#{uid};
+    </select>
+
+    <select id="validateUser" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        select uid from user where uid=#{uid};
+    </select>
+
+    <insert id="insertUser" parameterType="com.rk.po.User">
+        insert user values(#{uid}, #{uname}, #{upwd}, '0');
+    </insert>
+
+    <update id="updateUserName" parameterType="com.rk.po.User">
+        update user set uname=#{uname} where uid=#{uid};
+    </update>
+
+    <update id="updateUserPwd" parameterType="com.rk.po.User">
+        update user set upwd=#{upwd} where uid=#{uid};
+    </update>
+
+    <select id="getErrorSet" parameterType="java.lang.String"
+            resultMap="questionList">
+        select * from question where qid in (select qid from error where uid = #{uid});
+    </select>
+
+</mapper>

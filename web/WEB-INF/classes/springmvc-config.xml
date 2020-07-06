@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+  http://www.springframework.org/schema/mvc 
+  http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
+  http://www.springframework.org/schema/context 
+  http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- 加载注解驱动 -->
+	<mvc:annotation-driven />
+	<!-- 配置包扫描器，扫描@Controller注解的类 -->
+	<context:component-scan base-package="com.rk.controller" />
+
+
+	<!-- 配置拦截器
+	<mvc:interceptors>
+		&lt;!&ndash;使用bean直接定义在<mvc:interceptors>下面的拦截器将拦截所有请求&ndash;&gt;
+		&lt;!&ndash;  <bean class="com.itheima.interceptor.CustomInterceptor"/> &ndash;&gt;
+		&lt;!&ndash; 拦截器1 &ndash;&gt;
+		<mvc:interceptor>
+			&lt;!&ndash; 配置拦截器作用的路径 &ndash;&gt;
+			<mvc:mapping path="/**/hrefInterceptor/**" />
+			&lt;!&ndash; 定义在<mvc:interceptor>下面的表示匹配指定路径的请求才进行拦截的 &ndash;&gt;
+			<bean class="com.rk.interceptor.LoginInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>-->
+
+	<!--配置静态资源的访问映射，此配置中的文件，将不被前端控制器拦截 -->
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/img/" mapping="/img/**" />
+
+	<!-- 配置视图解析器 -->
+	<bean class=
+    "org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+</beans>
